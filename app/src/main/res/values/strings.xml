@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AutoCallBlocker</string>
+    <string name="label_home">Home</string>
+    <string name="label_history">History</string>
+    <string name="label_settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="description_add_contact">Add Contact</string>
+    <string name="empty_contacts_msg">Your contacts are empty.</string>
+    <string name="empty_call_log_message">No call logs</string>
+</resources>
