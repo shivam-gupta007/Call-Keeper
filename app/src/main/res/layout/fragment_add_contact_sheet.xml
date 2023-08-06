@@ -13,19 +13,24 @@
         android:padding="@dimen/padding_16dp"
         tools:context=".feature_contacts.presentation.add_edit_contact.AddContactSheet">
 
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/chooseContactBtn"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose from your Contacts" />
+            android:text="@string/label_choose_from_your_contacts" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/orLabelTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8dp"
-            android:text="OR"
+            android:text="@string/label_or"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
@@ -35,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8dp"
-            android:hint="Enter contact name">
+            android:hint="@string/hint_contact_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -51,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8dp"
-            android:hint="Enter phone number">
+            android:hint="@string/hint_phone_number">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -68,12 +73,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8dp"
-            android:hint="Enter custom message (Optional)">
+            android:hint="@string/hint_custom_message">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
+                android:lines="5"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -85,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8dp"
-            android:text="Add" />
+            android:text="@string/label_add" />
 
 
     </LinearLayout>

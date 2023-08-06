@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.shivamgupta.autocallblocker.feature_contacts.domain.model.CallLog" />
+        <import type="com.shivamgupta.callkeeper.feature_contacts.domain.model.CallLog" />
 
         <variable
             name="callLog"
-            type="com.shivamgupta.autocallblocker.feature_contacts.domain.model.CallLog" />
+            type="com.shivamgupta.callkeeper.feature_contacts.domain.model.CallLog" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -29,12 +29,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    app:setProfileBackgroundColor="@{callLog.defaultPhotoColor}"
-                    tools:background="@color/orange"
-                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        app:setProfileBackgroundColor="@{callLog.defaultPhotoColor}"
+                        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                        tools:background="@color/orange" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        app:setProfileIconText="@{callLog.name}"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:textColor="@color/black"
+                        tools:text="SG" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
