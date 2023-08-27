@@ -8,6 +8,7 @@ import com.shivamgupta.callkeeper.feature_contacts.data.repository.ContactsRepos
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 import com.shivamgupta.callkeeper.feature_contacts.util.printToLog
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ContactsRepositoryImpl @Inject constructor(
@@ -56,12 +57,23 @@ class ContactsRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun insertContact(contactEntity: ContactEntity) {
+    override suspend fun addContact(contactEntity: ContactEntity) {
         contactsDao.insertContact(contactEntity)
     }
 
-    override suspend fun getContacts(): List<ContactEntity> {
+    override fun fetchContacts(): Flow<List<ContactEntity>> {
         return contactsDao.getContacts()
+    }
+
+    override suspend fun updateContact(name: String, smsMessage: String, phoneNumber: String, id: Int) {
+        contactsDao.updateContact(name, smsMessage, phoneNumber, id)
+    }
+
+    override suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int){
+        contactsDao.updateContactSelectStatus(isSelected,id)
+    }
+
+    override suspend fun fetchContact(phoneNumber: String): ContactEntity? {
+        return contactsDao.getContact(phoneNumber)
     }
 }

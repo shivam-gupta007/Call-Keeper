@@ -36,7 +36,7 @@
                     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
                     tools:background="@color/orange" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -55,14 +55,15 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{contact.name}"
+                    app:handleTextLength="@{18}"
                     android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                     tools:text="Shivam Gupta" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -73,6 +74,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/contactSelectIv"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center_vertical"

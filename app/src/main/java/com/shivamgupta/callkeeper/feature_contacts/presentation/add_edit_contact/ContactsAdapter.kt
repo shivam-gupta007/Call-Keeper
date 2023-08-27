@@ -14,7 +14,8 @@ import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 
 class ContactsAdapter(
     private val items: List<Contact>,
-    private val onItemClick: () -> Unit
+    private val onItemClick: (contact: Contact) -> Unit,
+    private val onContactSelect: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     inner class DataViewHolder(val binding: LayoutContactCardBinding) :
@@ -22,8 +23,21 @@ class ContactsAdapter(
 
         init {
             binding.root.setOnClickListener {
-                onItemClick()
+                val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
+                onItemClick(items[position])
             }
+
+            binding.contactSelectIv.apply {
+                setOnClickListener {
+                    val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
+                    tag = if (tag == "unchecked") "checked" else "unchecked"
+                    setImageResource(if (tag == "unchecked") R.drawable.ic_circle else R.drawable.ic_circle_check)
+
+                    val isSelected = (tag == "checked")
+                    onContactSelect(position, isSelected)
+                }
+            }
+
         }
 
         fun bind(item: Contact) = with(binding) {

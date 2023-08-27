@@ -3,12 +3,20 @@ package com.shivamgupta.callkeeper.feature_contacts.data.repository
 import android.net.Uri
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
+import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepository {
 
     fun extractContactDetails(contactUri: Uri): Contact?
 
-    suspend fun insertContact(contactEntity: ContactEntity)
+    suspend fun addContact(contactEntity: ContactEntity)
 
-    suspend fun getContacts(): List<ContactEntity>
+    suspend fun updateContact(name: String, smsMessage: String, phoneNumber: String, id: Int)
+
+    suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int)
+
+    suspend fun fetchContact(phoneNumber: String): ContactEntity?
+
+    fun fetchContacts(): Flow<List<ContactEntity>>
+
 }

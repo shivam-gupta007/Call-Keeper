@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav_graph"
+    app:startDestination="@id/mainActivity">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contact.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_addContactSheet"
+            app:destination="@id/addContactSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/addContactSheet"
+        android:name="com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contact.AddContactSheet"
+        android:label="AddContactSheet"
+        tools:layout="@layout/fragment_add_contact_sheet">
+
+        <argument
+            android:name="contact"
+            app:argType="com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact" />
+
+    </dialog>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.shivamgupta.callkeeper.feature_contacts.presentation.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+</navigation>

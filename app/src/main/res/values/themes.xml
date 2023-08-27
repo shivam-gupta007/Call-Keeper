@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.AutoCallBlocker" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.CallKeeper" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -30,5 +30,5 @@
         <item name="android:statusBarColor">@color/md_theme_light_primary</item>
     </style>
 
-    <style name="Theme.AutoCallBlocker" parent="Base.Theme.AutoCallBlocker" />
+    <style name="Theme.AutoCallBlocker" parent="Base.Theme.CallKeeper" />
 </resources>

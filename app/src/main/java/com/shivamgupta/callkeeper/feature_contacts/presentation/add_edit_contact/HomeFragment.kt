@@ -9,9 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.shivamgupta.callkeeper.databinding.FragmentHomeBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.mapper.toContact
-import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
-import com.shivamgupta.callkeeper.feature_contacts.util.launchMain
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +18,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: AddContactViewModel by viewModels()
+    private val viewModel: ContactsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +38,12 @@ class HomeFragment : Fragment() {
             )
         }*/
 
+        viewModel.getContacts()
+
         lifecycleScope.launch(Dispatchers.Main) {
-            val contacts = viewModel.getContacts().map {
-                it.toContact()
+            viewModel.contacts.collect {
+                setupContacts(it)
             }
-            setupContacts(contacts)
         }
 
         addContactFab.setOnClickListener {
@@ -52,12 +51,18 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupContacts(contacts: List<Contact>) {
+    private fun setupContacts(contactEntities: List<ContactEntity>) {
         binding.contactsRv.adapter = ContactsAdapter(
-            items = contacts,
-            onItemClick = {
-                AddContactSheet.newInstance(customMessageMode = true)
-                    .show(childFragmentManager, AddContactSheet.TAG)
+            items = contactEntities.map { it.toContact() },
+            onItemClick = { contact ->
+                AddContactSheet.newInstance(
+                    updateContactDetails = true,
+                    phoneNumber = contact.phoneNumber
+                ).show(childFragmentManager, AddContactSheet.TAG)
+            },
+            onContactSelect = { position, isSelected ->
+                val contactId = contactEntities[position].id
+                viewModel.updateContactSelectStatus(isSelected, contactId)
             }
         )
     }

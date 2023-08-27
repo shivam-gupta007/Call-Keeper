@@ -9,6 +9,7 @@
     <string name="empty_contacts_msg">Your contacts are empty.</string>
     <string name="empty_call_log_message">No call logs</string>
     <string name="label_submit">Submit</string>
+    <string name="label_update">Update</string>
     <string name="hint_contact_name">Enter contact name</string>
     <string name="hint_phone_number">Enter phone number</string>
     <string name="hint_custom_message">Enter custom message (Optional)</string>
@@ -21,4 +22,5 @@
     <string name="invalid_phone_number_error_msg">Phone number must be of 10 digits</string>
     <string name="invalid_custom_message_error_msg">Message cannot contain numbers or special characters</string>
     <string name="unexpected_error_msg">An Unexpected error occurred.</string>
+    <string name="duplicate_phone_number_error_msg">Phone number already exists.</string>
 </resources>
