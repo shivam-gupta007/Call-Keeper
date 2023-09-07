@@ -13,6 +13,7 @@ import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.FragmentAddContactSheetBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
+import com.shivamgupta.callkeeper.feature_contacts.util.Constants.MESSAGE_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.PHONE_NUMBER_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.TEXT_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
@@ -185,7 +186,7 @@ class AddContactSheet : BottomSheetDialogFragment() {
                 false
             }
 
-            customMessage.isNotEmpty() && !customMessage.matches(TEXT_REGEX) -> {
+            customMessage.isNotEmpty() && !customMessage.matches(MESSAGE_REGEX) -> {
                 binding.customMessageLayout.setErrorMessage(ResourceProvider.getString(R.string.invalid_custom_message_error_msg))
                 false
             }

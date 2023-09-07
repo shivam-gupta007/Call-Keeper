@@ -18,7 +18,7 @@
     <string name="label_or">OR</string>
     <string name="empty_name_error_msg">Please enter contact name</string>
     <string name="empty_phone_number_error_msg">Please enter phone number</string>
-    <string name="invalid_name_error_msg">Contact Names cannot contain numbers or special characters</string>
+    <string name="invalid_name_error_msg">Contact Name cannot contain numbers or special characters</string>
     <string name="invalid_phone_number_error_msg">Phone number must be of 10 digits</string>
     <string name="invalid_custom_message_error_msg">Message cannot contain numbers or special characters</string>
     <string name="unexpected_error_msg">An Unexpected error occurred.</string>

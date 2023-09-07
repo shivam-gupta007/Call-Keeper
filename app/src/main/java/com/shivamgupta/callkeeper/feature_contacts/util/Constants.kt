@@ -10,6 +10,7 @@ object Constants {
 
     //Regular Expressions
     val TEXT_REGEX = Regex("[A-Za-z ]+")
+    val MESSAGE_REGEX = Regex("[A-Za-z .]+")
     val PHONE_NUMBER_REGEX = Regex("^[6789][0-9]{9}\$")
 
     const val CONTACTS_DATABASE = "contacts_database"
