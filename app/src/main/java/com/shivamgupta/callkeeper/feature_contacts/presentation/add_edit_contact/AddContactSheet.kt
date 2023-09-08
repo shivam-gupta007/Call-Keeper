@@ -13,6 +13,7 @@ import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.FragmentAddContactSheetBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
+import com.shivamgupta.callkeeper.feature_contacts.domain.model.getPhoneNumberWithoutPrefixCode
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.MESSAGE_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.PHONE_NUMBER_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.TEXT_REGEX
@@ -53,7 +54,10 @@ class AddContactSheet : BottomSheetDialogFragment() {
 
         if (contactUri != null) {
             val contact = contactsViewModel.getContactDetails(contactUri)
-            //showToast("Name: ${contact?.name} PhoneNumber: ${contact?.phoneNumber}")
+            binding.apply {
+                contactNameLayout.textValue = contact?.name.orEmpty()
+                phoneNumberLayout.textValue = contact?.getPhoneNumberWithoutPrefixCode().orEmpty()
+            }
         }
     }
 

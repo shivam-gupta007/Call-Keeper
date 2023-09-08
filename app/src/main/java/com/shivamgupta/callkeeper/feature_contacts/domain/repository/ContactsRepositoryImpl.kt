@@ -7,7 +7,6 @@ import com.shivamgupta.callkeeper.feature_contacts.data.data_source.local.Contac
 import com.shivamgupta.callkeeper.feature_contacts.data.repository.ContactsRepository
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
-import com.shivamgupta.callkeeper.feature_contacts.util.printToLog
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,8 +20,9 @@ class ContactsRepositoryImpl @Inject constructor(
     override fun extractContactDetails(contactUri: Uri): Contact? {
         val contentResolver = app.contentResolver
         val projection = arrayOf(
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Phone.NUMBER
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER
         )
 
         val cursor = contentResolver.query(
@@ -33,20 +33,43 @@ class ContactsRepositoryImpl @Inject constructor(
             null
         )
 
+
         return if (cursor != null) {
             var contact: Contact? = null
             while (cursor.moveToNext()) {
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                val phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
+                val hasPhoneNumber = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER))
 
-                contact = Contact(
-                    name = name,
-                    phoneNumber = phoneNumber,
-                    smsMessage = "",
-                    isContactSelected = false
-                )
+                if (hasPhoneNumber > 0) {
+                    val phoneNumberUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+                    val phoneNumberSelection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id
+                    val phoneNumberProjection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                    val phoneNumberCursor = contentResolver.query(
+                        phoneNumberUri,
+                        phoneNumberProjection,
+                        phoneNumberSelection,
+                        null,
+                        null
+                    )
 
-                contact.toString().printToLog()
+                    if (phoneNumberCursor != null) {
+
+                        while (phoneNumberCursor.moveToNext()) {
+                            val phoneNumber = phoneNumberCursor.getString(phoneNumberCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                            contact = Contact(
+                                name = name,
+                                phoneNumber = phoneNumber,
+                                smsMessage = "",
+                                isContactSelected = false
+                            )
+
+                        }
+
+                        phoneNumberCursor.close()
+                    }
+                }
             }
 
             cursor.close()
@@ -69,8 +92,8 @@ class ContactsRepositoryImpl @Inject constructor(
         contactsDao.updateContact(name, smsMessage, phoneNumber, id)
     }
 
-    override suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int){
-        contactsDao.updateContactSelectStatus(isSelected,id)
+    override suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int) {
+        contactsDao.updateContactSelectStatus(isSelected, id)
     }
 
     override suspend fun fetchContact(phoneNumber: String): ContactEntity? {

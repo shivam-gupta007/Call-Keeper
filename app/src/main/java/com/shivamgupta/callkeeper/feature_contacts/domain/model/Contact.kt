@@ -10,10 +10,14 @@ data class Contact(
     val smsMessage: String = "",
     val defaultPhotoColor: Int = R.color.blue,
     val isContactSelected: Boolean = false
-){
+) {
     companion object {
-        fun getRandomColor() : Int {
+        fun getRandomColor(): Int {
             return Constants.profileImgColorRes[Random.nextInt(0, 4)]
         }
     }
+}
+
+fun Contact.getPhoneNumberWithoutPrefixCode() : String {
+    return phoneNumber.removePrefix("+91")
 }
