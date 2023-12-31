@@ -50,6 +50,7 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIconMode="clear_text"
                 android:layout_marginTop="@dimen/margin_8dp"
                 android:hint="@string/hint_contact_name">
 
@@ -67,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
+                app:endIconMode="clear_text"
                 android:hint="@string/hint_phone_number">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -83,6 +85,7 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIconMode="clear_text"
                 android:layout_marginTop="@dimen/margin_8dp"
                 android:hint="@string/hint_custom_message">
 

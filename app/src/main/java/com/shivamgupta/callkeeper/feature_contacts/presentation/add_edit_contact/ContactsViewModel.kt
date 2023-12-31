@@ -13,10 +13,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,13 +31,16 @@ class ContactsViewModel @Inject constructor(
     private val _moduleError = MutableStateFlow<String?>(null)
     val moduleError: StateFlow<String?> get() = _moduleError
 
-    private val _contacts = MutableStateFlow<List<ContactEntity>>(emptyList())
-    val contacts: StateFlow<List<ContactEntity>> get() = _contacts
+    private val _contacts = MutableStateFlow<List<ContactEntity>?>(null)
+    val contacts get() = _contacts.asStateFlow()
 
     private val _pickedContact: MutableStateFlow<Contact?> = MutableStateFlow(null)
     val pickedContact: StateFlow<Contact?> get() = _pickedContact
 
-    var defaultMessage: String? = null
+    private var defaultMessage: String? = null
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading get() = _isLoading.asStateFlow()
 
     init {
         getDefaultMessage()
@@ -51,6 +56,12 @@ class ContactsViewModel @Inject constructor(
         viewModelScope.launch {
             val contact = repository.extractContactDetails(contactUri)
             _pickedContact.emit(contact)
+        }
+    }
+
+    fun clearPickedContact(){
+        viewModelScope.launch {
+            _pickedContact.emit(null)
         }
     }
 
@@ -121,11 +132,13 @@ class ContactsViewModel @Inject constructor(
 
     fun getContacts() {
         viewModelScope.launch {
+            _isLoading.emit(true)
             repository.fetchContacts().flowOn(Dispatchers.IO).catch {
-                    _moduleError.emit(ResourceProvider.getString(R.string.unexpected_error_msg))
-                }.collect {
-                    _contacts.emit(it)
-                }
+                _moduleError.emit(ResourceProvider.getString(R.string.unexpected_error_msg))
+            }.collect {
+                _isLoading.emit(false)
+                _contacts.emit(it)
+            }
         }
     }
 }

@@ -31,4 +31,5 @@
     <string name="default_message_guide_text">Apply default message to all contacts</string>
     <string name="default_message_label">Default Message</string>
     <string name="apply_changes_label">Update message</string>
+    <string name="label_add_contact">Add contact</string>
 </resources>

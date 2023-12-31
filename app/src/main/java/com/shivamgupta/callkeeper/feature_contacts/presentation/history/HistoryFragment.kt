@@ -9,8 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.shivamgupta.callkeeper.databinding.FragmentHistoryBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.mapper.toCallLog
+import com.shivamgupta.callkeeper.feature_contacts.util.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -28,14 +30,29 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.apply {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
+
         viewModel.getCallLogs()
         setupViews()
     }
 
     private fun setupViews() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.callLogs.collect { callLogEntities ->
-                binding.callLogsRv.adapter = CallLogsAdapter(callLogEntities.map { it.toCallLog() })
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.callLogs.collect { callLogs ->
+                callLogs?.let {
+                    binding.callLogsRv.adapter = CallLogsAdapter(it)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.moduleError.collectLatest { message ->
+                message?.let {
+                    showSnackBar(text = it, rootLayout = binding.root)
+                }
             }
         }
     }

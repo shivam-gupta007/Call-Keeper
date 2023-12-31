@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: ContactsViewModel by viewModels()
+    private val viewModel: ContactsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,17 +34,25 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.apply {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
+
         viewModel.getContacts()
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.contacts.collect {
-                setupContacts(it)
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.contacts.collect { contacts ->
+                contacts?.let {
+                    setupContacts(it)
+                }
             }
         }
 
-        addContactFab.setOnClickListener {
-            AddContactSheet().show(childFragmentManager, AddContactSheet.TAG)
+        binding.addContactFab.setOnClickListener {
+            viewModel.clearPickedContact()
+            AddContactSheet().show(parentFragmentManager, AddContactSheet.TAG)
         }
     }
 
@@ -54,7 +63,7 @@ class HomeFragment : Fragment() {
                 AddContactSheet.newInstance(
                     updateContactDetails = true,
                     phoneNumber = contact.phoneNumber
-                ).show(childFragmentManager, AddContactSheet.TAG)
+                ).show(parentFragmentManager, AddContactSheet.TAG)
             },
             onItemLongPressed = { contact ->
                 showDeleteContactDialog(contact)
@@ -72,13 +81,13 @@ class HomeFragment : Fragment() {
             .setTitle(ResourceProvider.getString(R.string.delete_contact_confirmation_msg))
             .setMessage(contactInfo)
             .setIcon(R.drawable.ic_delete)
-            .setPositiveButton(ResourceProvider.getString(R.string.delete_contact)) { dialog, index ->
+            .setPositiveButton(ResourceProvider.getString(R.string.delete_contact)) { dialog, _ ->
                 viewModel.deleteContact(phoneNumber = contact.phoneNumber)
 
                 showSnackBar(text = "${contact.name} - ${contact.phoneNumber} deleted", binding.rootLayout)
 
                 dialog.dismiss()
-            }.setNegativeButton(ResourceProvider.getString(R.string.cancel_contact)) { dialog, index ->
+            }.setNegativeButton(ResourceProvider.getString(R.string.cancel_contact)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
