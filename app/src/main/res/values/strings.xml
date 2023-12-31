@@ -3,7 +3,6 @@
     <string name="label_home">Home</string>
     <string name="label_history">History</string>
     <string name="label_settings">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="description_add_contact">Add Contact</string>
     <string name="empty_contacts_msg">Your contacts are empty.</string>
@@ -23,4 +22,13 @@
     <string name="invalid_custom_message_error_msg">Message cannot contain numbers or special characters</string>
     <string name="unexpected_error_msg">An Unexpected error occurred.</string>
     <string name="duplicate_phone_number_error_msg">Phone number already exists.</string>
+    <string name="delete_contact_confirmation_msg">Are you sure you want to delete this contact?</string>
+    <string name="delete_contact">Delete</string>
+    <string name="cancel_contact">Cancel</string>
+    <string name="contact_permission_error_msg">Contacts Permission Denied.</string>
+    <string name="default_message">I am currently busy. Call me later</string>
+    <string name="enable_feature_label">Enable call rejection</string>
+    <string name="default_message_guide_text">Apply default message to all contacts</string>
+    <string name="default_message_label">Default Message</string>
+    <string name="apply_changes_label">Update message</string>
 </resources>

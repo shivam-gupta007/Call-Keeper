@@ -78,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_4dp"
-                        android:text="@{callLog.date}"
+                        app:formatAsDate="@{callLog.timestamp}"
                         tools:text="27 June 2023 11:35 PM"
                         android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 

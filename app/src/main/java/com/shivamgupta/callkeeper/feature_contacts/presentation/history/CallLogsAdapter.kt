@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.LayoutCallLogCardBinding
-import com.shivamgupta.callkeeper.databinding.LayoutEmptyDataBinding
+import com.shivamgupta.callkeeper.databinding.LayoutEmptyCallLogsBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.CallLog
 
 class CallLogsAdapter(private val items: List<CallLog>) :
@@ -22,7 +22,7 @@ class CallLogsAdapter(private val items: List<CallLog>) :
         }
     }
 
-    inner class EmptyViewHolder(val binding: LayoutEmptyDataBinding) : ViewHolder(binding.root) {
+    inner class EmptyViewHolder(val binding: LayoutEmptyCallLogsBinding) : ViewHolder(binding.root) {
         fun bind() = with(binding) {
             message = root.resources.getString(R.string.empty_call_log_message)
         }
@@ -45,7 +45,7 @@ class CallLogsAdapter(private val items: List<CallLog>) :
                 EmptyViewHolder(
                     DataBindingUtil.inflate(
                         LayoutInflater.from(parent.context),
-                        R.layout.layout_contact_card,
+                        R.layout.layout_empty_call_logs,
                         parent,
                         false
                     )

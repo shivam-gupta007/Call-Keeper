@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.LayoutContactCardBinding
-import com.shivamgupta.callkeeper.databinding.LayoutEmptyDataBinding
+import com.shivamgupta.callkeeper.databinding.LayoutEmptyContactsBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
-
 
 class ContactsAdapter(
     private val items: List<Contact>,
-    private val onItemClick: (contact: Contact) -> Unit,
+    private val onItemClick: (Contact) -> Unit,
+    private val onItemLongPressed: (Contact) -> Unit,
     private val onContactSelect: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -25,6 +25,14 @@ class ContactsAdapter(
             binding.root.setOnClickListener {
                 val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
                 onItemClick(items[position])
+            }
+
+            binding.root.setOnLongClickListener {
+                adapterPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { position ->
+                    onItemLongPressed.invoke(items[position])
+                }
+
+                true
             }
 
             binding.contactSelectIv.apply {
@@ -46,7 +54,7 @@ class ContactsAdapter(
         }
     }
 
-    inner class EmptyViewHolder(val binding: LayoutEmptyDataBinding) : ViewHolder(binding.root) {
+    inner class EmptyViewHolder(val binding: LayoutEmptyContactsBinding) : ViewHolder(binding.root) {
         fun bind() = with(binding) {
             message = root.resources.getString(R.string.empty_contacts_msg)
         }
@@ -69,7 +77,7 @@ class ContactsAdapter(
                 EmptyViewHolder(
                     DataBindingUtil.inflate(
                         LayoutInflater.from(parent.context),
-                        R.layout.layout_empty_data,
+                        R.layout.layout_empty_contacts,
                         parent,
                         false
                     )
@@ -103,6 +111,7 @@ class ContactsAdapter(
             }
         }
     }
+
 
     companion object {
         private const val VIEW_TYPE_EMPTY = 0

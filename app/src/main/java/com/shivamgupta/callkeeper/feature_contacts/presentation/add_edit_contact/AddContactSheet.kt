@@ -11,21 +11,20 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.FragmentAddContactSheetBinding
-import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.getPhoneNumberWithoutPrefixCode
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.MESSAGE_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.PHONE_NUMBER_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.TEXT_REGEX
-import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
+import com.shivamgupta.callkeeper.feature_contacts.util.PermissionUtils
 import com.shivamgupta.callkeeper.feature_contacts.util.afterTextChanged
-import com.shivamgupta.callkeeper.feature_contacts.util.checkContactsPermission
 import com.shivamgupta.callkeeper.feature_contacts.util.setErrorMessage
 import com.shivamgupta.callkeeper.feature_contacts.util.showSnackBar
-import com.shivamgupta.callkeeper.feature_contacts.util.showToast
 import com.shivamgupta.callkeeper.feature_contacts.util.textValue
+import com.shivamgupta.callkeeper.feature_contacts.util.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -36,28 +35,23 @@ class AddContactSheet : BottomSheetDialogFragment() {
     private var phoneNumber: String? = null
     private val contactsViewModel: ContactsViewModel by activityViewModels()
     private var contact: ContactEntity? = null
-    var isPhoneNumberAlreadyExists = false
+    private var isPhoneNumberAlreadyExists = false
 
     private val requestContactsPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isPermissionGranted ->
         if (isPermissionGranted) {
-            requestPickContactLauncher.launch(null)
+            pickContactLauncher.launch(null)
         } else {
-            showToast(text = "Contacts Permission Denied.")
+            toast(textResId = R.string.contact_permission_error_msg)
         }
     }
 
-    private val requestPickContactLauncher = registerForActivityResult(
+    private val pickContactLauncher = registerForActivityResult(
         ActivityResultContracts.PickContact()
     ) { contactUri ->
-
-        if (contactUri != null) {
-            val contact = contactsViewModel.getContactDetails(contactUri)
-            binding.apply {
-                contactNameLayout.textValue = contact?.name.orEmpty()
-                phoneNumberLayout.textValue = contact?.getPhoneNumberWithoutPrefixCode().orEmpty()
-            }
+        contactUri?.let {
+            contactsViewModel.getContactDetails(it)
         }
     }
 
@@ -98,11 +92,22 @@ class AddContactSheet : BottomSheetDialogFragment() {
 
     private fun setupContactChooser() {
         binding.chooseContactBtn.setOnClickListener {
-            val permissionAlreadyGranted = checkContactsPermission(requireContext())
+            val permissionAlreadyGranted = PermissionUtils.checkContactsPermission(requireContext())
             if (permissionAlreadyGranted) {
-                requestPickContactLauncher.launch(null)
+                pickContactLauncher.launch(null)
             } else {
                 requestContactsPermission.launch(android.Manifest.permission.READ_CONTACTS)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            contactsViewModel.pickedContact.collectLatest { pickedContact ->
+                pickedContact?.let {
+                    binding.apply {
+                        contactNameLayout.textValue = it.name
+                        phoneNumberLayout.textValue = it.getPhoneNumberWithoutPrefixCode()
+                    }
+                }
             }
         }
     }
@@ -137,7 +142,9 @@ class AddContactSheet : BottomSheetDialogFragment() {
                     } else {
                         contactsViewModel.insertContact(
                             ContactEntity(
-                                name = contactName, phoneNumber = phoneNumber, smsMessage = message, defaultPhotoColor = Contact.getRandomColor(), isContactSelected = false
+                                name = contactName,
+                                phoneNumber = phoneNumber,
+                                smsMessage = message,
                             )
                         )
                     }
@@ -147,12 +154,10 @@ class AddContactSheet : BottomSheetDialogFragment() {
             }
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             contactsViewModel.moduleError.collect {
                 it?.let { errorMessage ->
-                    showSnackBar(
-                        text = errorMessage, rootLayout = binding.root
-                    )
+                    showSnackBar(text = errorMessage, rootLayout = binding.root)
                 }
             }
         }
@@ -166,32 +171,32 @@ class AddContactSheet : BottomSheetDialogFragment() {
 
         return when {
             contactName.isEmpty() -> {
-                binding.contactNameLayout.setErrorMessage(ResourceProvider.getString(R.string.empty_name_error_msg))
+                binding.contactNameLayout.setErrorMessage(R.string.empty_name_error_msg)
                 false
             }
 
             !contactName.matches(TEXT_REGEX) -> {
-                binding.contactNameLayout.setErrorMessage(ResourceProvider.getString(R.string.invalid_name_error_msg))
+                binding.contactNameLayout.setErrorMessage(R.string.invalid_name_error_msg)
                 false
             }
 
             phoneNumber.isEmpty() -> {
-                binding.phoneNumberLayout.setErrorMessage(ResourceProvider.getString(R.string.empty_phone_number_error_msg))
+                binding.phoneNumberLayout.setErrorMessage(R.string.empty_phone_number_error_msg)
                 false
             }
 
             !phoneNumber.matches(PHONE_NUMBER_REGEX) -> {
-                binding.phoneNumberLayout.setErrorMessage(ResourceProvider.getString(R.string.invalid_phone_number_error_msg))
+                binding.phoneNumberLayout.setErrorMessage(R.string.invalid_phone_number_error_msg)
                 false
             }
 
             isPhoneNumberAlreadyExists -> {
-                binding.phoneNumberLayout.setErrorMessage(ResourceProvider.getString(R.string.duplicate_phone_number_error_msg))
+                binding.phoneNumberLayout.setErrorMessage(R.string.duplicate_phone_number_error_msg)
                 false
             }
 
             customMessage.isNotEmpty() && !customMessage.matches(MESSAGE_REGEX) -> {
-                binding.customMessageLayout.setErrorMessage(ResourceProvider.getString(R.string.invalid_custom_message_error_msg))
+                binding.customMessageLayout.setErrorMessage(R.string.invalid_custom_message_error_msg)
                 false
             }
 

@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.shivamgupta.callkeeper.feature_contacts.presentation.settings.SettingsViewModel" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-
-        >
+        android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/rootLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -21,56 +22,48 @@
             tools:context=".feature_contacts.presentation.settings.SettingsFragment">
 
             <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/enable_feature_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:text="Enable Auto call rejection"
+                android:text="@string/enable_feature_label"
+                android:checked="@{vm.isCallRejectionEnabled()}"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/apply_default_msg_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:text="Apply default message to all contacts"
+                android:checked="@{vm.applyDefaultMsg}"
+                android:text="@string/default_message_guide_text"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/default_msg_input_layout"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:hint="Default Message">
+                android:hint="@string/default_message_label">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
-                    android:text="I am currently busy. Call me later" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_8dp"
-                android:hint="Schedule Auto Call Rejection">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone" />
+                    android:inputType="textMultiLine"
+                    android:text="@{vm.defaultSmsMessage}"
+                    tools:text="I am currently busy. Call me later" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/apply_changes_button"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:text="Apply Changes" />
-
+                android:text="@string/apply_changes_label" />
 
         </LinearLayout>
     </ScrollView>

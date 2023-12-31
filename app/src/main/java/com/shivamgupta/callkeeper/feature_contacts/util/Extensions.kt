@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -17,11 +18,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-fun Fragment.showToast(text: String) {
+fun Fragment.toast(text: String) {
     Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
 }
 
-fun Activity.showToast(text: String) {
+fun Fragment.toast(@StringRes textResId: Int, length: Int = Toast.LENGTH_SHORT) {
+    context?.let {
+        Toast.makeText(it, ResourceProvider.getString(textResId), length).show()
+    }
+}
+
+fun Activity.toast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
@@ -40,17 +47,13 @@ fun View.gone() {
 
 fun Activity.showSnackBar(text: String, rootLayout: View) {
     Snackbar.make(
-        rootLayout,
-        text,
-        Snackbar.LENGTH_SHORT
+        rootLayout, text, Snackbar.LENGTH_SHORT
     ).show()
 }
 
 fun Fragment.showSnackBar(text: String, rootLayout: View) {
     Snackbar.make(
-        rootLayout,
-        text,
-        Snackbar.LENGTH_SHORT
+        rootLayout, text, Snackbar.LENGTH_SHORT
     ).show()
 }
 
@@ -62,8 +65,8 @@ var TextInputLayout.textValue: String
         editText?.setText(value)
     }
 
-fun TextInputLayout.setErrorMessage(message: String) {
-    error = message
+fun TextInputLayout.setErrorMessage(@StringRes textResId: Int) {
+    error = ResourceProvider.getString(textResId)
     isErrorEnabled = true
     editText?.requestFocus()
 
@@ -98,7 +101,7 @@ fun LifecycleOwner.launchMain(
     block: suspend CoroutineScope.() -> Unit
 ) {
     lifecycleScope.launch(Dispatchers.Main) {
-        block
+
     }
 }
 

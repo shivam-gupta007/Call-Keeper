@@ -5,14 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.shivamgupta.callkeeper.databinding.FragmentHistoryBinding
-import com.shivamgupta.callkeeper.feature_contacts.domain.model.CallLog
-import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
+import com.shivamgupta.callkeeper.feature_contacts.domain.mapper.toCallLog
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class HistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentHistoryBinding
+    private val viewModel: CallLogsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,17 +28,15 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.getCallLogs()
+        setupViews()
+    }
 
-        val items = (0..20).map {
-            CallLog(
-                name = "Person $it",
-                phoneNumber = "9005080000",
-                smsMessage = "Currently, I am working on a project. I will call you later.",
-                date = "27 June 2023 11:35 PM",
-                defaultPhotoColor = Contact.getRandomColor()
-            )
+    private fun setupViews() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.callLogs.collect { callLogEntities ->
+                binding.callLogsRv.adapter = CallLogsAdapter(callLogEntities.map { it.toCallLog() })
+            }
         }
-        binding.callLogsRv.adapter = CallLogsAdapter(items)
     }
 }

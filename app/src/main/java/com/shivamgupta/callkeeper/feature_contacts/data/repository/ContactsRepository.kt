@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepository {
 
-    fun extractContactDetails(contactUri: Uri): Contact?
+    suspend fun extractContactDetails(contactUri: Uri): Contact?
 
     suspend fun addContact(contactEntity: ContactEntity)
 
@@ -15,7 +15,13 @@ interface ContactsRepository {
 
     suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int)
 
+    suspend fun updateSelectStatusOfAllContacts(isSelected: Boolean)
+
     suspend fun fetchContact(phoneNumber: String): ContactEntity?
+
+    suspend fun deleteContact(phoneNumber: String)
+
+    suspend fun updateDefaultMsgStatus(shouldUseDefaultMsg: Boolean)
 
     fun fetchContacts(): Flow<List<ContactEntity>>
 

@@ -7,7 +7,10 @@ import com.shivamgupta.callkeeper.feature_contacts.data.data_source.local.Contac
 import com.shivamgupta.callkeeper.feature_contacts.data.repository.ContactsRepository
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ContactsRepositoryImpl @Inject constructor(
@@ -15,9 +18,9 @@ class ContactsRepositoryImpl @Inject constructor(
     database: ContactsDatabase
 ) : ContactsRepository {
 
-    private val contactsDao = database.getDao()
+    private val contactsDao = database.getContactsDao()
 
-    override fun extractContactDetails(contactUri: Uri): Contact? {
+    override suspend fun extractContactDetails(contactUri: Uri): Contact? {
         val contentResolver = app.contentResolver
         val projection = arrayOf(
             ContactsContract.Contacts._ID,
@@ -32,7 +35,6 @@ class ContactsRepositoryImpl @Inject constructor(
             null,
             null
         )
-
 
         return if (cursor != null) {
             var contact: Contact? = null
@@ -54,10 +56,8 @@ class ContactsRepositoryImpl @Inject constructor(
                     )
 
                     if (phoneNumberCursor != null) {
-
                         while (phoneNumberCursor.moveToNext()) {
                             val phoneNumber = phoneNumberCursor.getString(phoneNumberCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
-
                             contact = Contact(
                                 name = name,
                                 phoneNumber = phoneNumber,
@@ -81,7 +81,9 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addContact(contactEntity: ContactEntity) {
-        contactsDao.insertContact(contactEntity)
+        withContext(Dispatchers.IO){
+            contactsDao.insertContact(contactEntity)
+        }
     }
 
     override fun fetchContacts(): Flow<List<ContactEntity>> {
@@ -89,14 +91,36 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateContact(name: String, smsMessage: String, phoneNumber: String, id: Int) {
-        contactsDao.updateContact(name, smsMessage, phoneNumber, id)
+        withContext(Dispatchers.IO) {
+            contactsDao.updateContact(name, smsMessage, phoneNumber, id)
+        }
     }
 
     override suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int) {
-        contactsDao.updateContactSelectStatus(isSelected, id)
+        withContext(Dispatchers.IO) {
+            contactsDao.updateContactSelectStatus(isSelected, id)
+        }
+    }
+
+    override suspend fun updateSelectStatusOfAllContacts(isSelected: Boolean) {
+        withContext(Dispatchers.IO){
+            contactsDao.updateSelectStatusOfAllContacts(isSelected)
+        }
     }
 
     override suspend fun fetchContact(phoneNumber: String): ContactEntity? {
         return contactsDao.getContact(phoneNumber)
+    }
+
+    override suspend fun deleteContact(phoneNumber: String) {
+        withContext(Dispatchers.IO) {
+            contactsDao.deleteContact(phoneNumber)
+        }
+    }
+
+    override suspend fun updateDefaultMsgStatus(shouldUseDefaultMsg: Boolean) {
+        withContext(Dispatchers.IO){
+            contactsDao.updateDefaultMsgStatus(shouldUseDefaultMsg)
+        }
     }
 }

@@ -7,7 +7,16 @@ import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
 import com.shivamgupta.callkeeper.R
+import com.shivamgupta.callkeeper.feature_contacts.util.Constants
 import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @BindingAdapter("handleTextLength")
 fun bindHandleTextLength(textView: TextView, maxLengthToShow: Int) {
@@ -56,4 +65,13 @@ fun bindBtnText(button: MaterialButton, shouldUpdateContactDetails: Boolean) {
     button.text = ResourceProvider.getString(
         if (shouldUpdateContactDetails) R.string.label_update else R.string.label_add
     )
+}
+
+@BindingAdapter("formatAsDate")
+fun bindFormatAsDate(textView: TextView, timeStamp: Long?){
+    timeStamp?.let {
+        val currentDate = Date(Timestamp(it).time)
+        val desiredDateFormat = SimpleDateFormat(Constants.CALL_LOG_DATE_FORMAT, Locale.getDefault())
+        textView.text = desiredDateFormat.format(currentDate)
+    }
 }
