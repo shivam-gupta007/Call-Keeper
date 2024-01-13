@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200240976151",
+    "project_id": "call-keeper-2b391",
+    "storage_bucket": "call-keeper-2b391.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200240976151:android:5ea8e5e539dcbfdc316752",
+        "android_client_info": {
+          "package_name": "com.shivamgupta.callkeeper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF52AqGgtdRmrK7dLdYcPQbBRc0FMz1AM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,7 +9,7 @@ interface ContactsRepository {
 
     suspend fun extractContactDetails(contactUri: Uri): Contact?
 
-    suspend fun addContact(contactEntity: ContactEntity)
+    suspend fun insertContact(contactEntity: ContactEntity)
 
     suspend fun updateContact(name: String, smsMessage: String, phoneNumber: String, id: Int)
 
@@ -17,7 +17,7 @@ interface ContactsRepository {
 
     suspend fun updateSelectStatusOfAllContacts(isSelected: Boolean)
 
-    suspend fun fetchContact(phoneNumber: String): ContactEntity?
+    suspend fun fetchContactByPhoneNumber(phoneNumber: String): ContactEntity?
 
     suspend fun deleteContact(phoneNumber: String)
 

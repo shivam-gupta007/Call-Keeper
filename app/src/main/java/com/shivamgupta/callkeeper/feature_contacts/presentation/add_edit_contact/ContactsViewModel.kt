@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -68,7 +67,7 @@ class ContactsViewModel @Inject constructor(
     fun insertContact(contactEntity: ContactEntity) {
         viewModelScope.launch {
             try {
-                repository.addContact(
+                repository.insertContact(
                     if (contactEntity.smsMessage.isEmpty()) {
                         contactEntity.copy(smsMessage = defaultMessage.orEmpty())
                     } else {
@@ -122,11 +121,11 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun getContact(phoneNumber: String) = flow {
-        emit(repository.fetchContact(phoneNumber))
+        emit(repository.fetchContactByPhoneNumber(phoneNumber))
     }
 
     suspend fun checkIfPhoneNumberExists(phoneNumber: String): Boolean {
-        val contact = repository.fetchContact(phoneNumber)
+        val contact = repository.fetchContactByPhoneNumber(phoneNumber)
         return contact != null
     }
 

@@ -9,9 +9,12 @@
     <string name="empty_call_log_message">No call logs</string>
     <string name="label_submit">Submit</string>
     <string name="label_update">Update</string>
-    <string name="hint_contact_name">Enter contact name</string>
-    <string name="hint_phone_number">Enter phone number</string>
-    <string name="hint_custom_message">Enter custom message (Optional)</string>
+    <string name="hint_input_contact_name">Enter contact name</string>
+    <string name="hint_input_phone_number">Enter phone number</string>
+    <string name="hint_input_custom_message">Enter custom message (Optional)</string>
+    <string name="hint_contact_name">Name</string>
+    <string name="hint_phone_number">Phone number</string>
+    <string name="hint_custom_message">Message</string>
     <string name="label_add">Add</string>
     <string name="label_choose_from_your_contacts">Choose from your Contacts</string>
     <string name="label_or">OR</string>

@@ -16,7 +16,7 @@
     </fragment>
     <dialog
         android:id="@+id/addContactSheet"
-        android:name="com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contact.AddContactSheet"
+        android:name="com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contact.AddContactBottomSheet"
         android:label="AddContactSheet"
         tools:layout="@layout/fragment_add_contact_sheet">
 

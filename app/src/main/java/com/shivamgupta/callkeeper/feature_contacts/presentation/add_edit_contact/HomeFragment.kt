@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shivamgupta.callkeeper.R
@@ -52,7 +51,7 @@ class HomeFragment : Fragment() {
 
         binding.addContactFab.setOnClickListener {
             viewModel.clearPickedContact()
-            AddContactSheet().show(parentFragmentManager, AddContactSheet.TAG)
+            AddContactBottomSheet().show(parentFragmentManager, AddContactBottomSheet.TAG)
         }
     }
 
@@ -60,10 +59,10 @@ class HomeFragment : Fragment() {
         binding.contactsRecyclerView.adapter = ContactsAdapter(
             items = contactEntities.map { it.toContact() },
             onItemClick = { contact ->
-                AddContactSheet.newInstance(
+                AddContactBottomSheet.newInstance(
                     updateContactDetails = true,
                     phoneNumber = contact.phoneNumber
-                ).show(parentFragmentManager, AddContactSheet.TAG)
+                ).show(parentFragmentManager, AddContactBottomSheet.TAG)
             },
             onItemLongPressed = { contact ->
                 showDeleteContactDialog(contact)

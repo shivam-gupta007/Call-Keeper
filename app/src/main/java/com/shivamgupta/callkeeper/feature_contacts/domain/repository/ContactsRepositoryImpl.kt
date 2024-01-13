@@ -8,7 +8,6 @@ import com.shivamgupta.callkeeper.feature_contacts.data.repository.ContactsRepos
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -80,7 +79,7 @@ class ContactsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addContact(contactEntity: ContactEntity) {
+    override suspend fun insertContact(contactEntity: ContactEntity) {
         withContext(Dispatchers.IO){
             contactsDao.insertContact(contactEntity)
         }
@@ -108,8 +107,11 @@ class ContactsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchContact(phoneNumber: String): ContactEntity? {
-        return contactsDao.getContact(phoneNumber)
+    override suspend fun fetchContactByPhoneNumber(phoneNumber: String): ContactEntity? {
+        val contact =  withContext(Dispatchers.IO) {
+            contactsDao.getContactByPhoneNumber(phoneNumber)
+        }
+        return contact
     }
 
     override suspend fun deleteContact(phoneNumber: String) {

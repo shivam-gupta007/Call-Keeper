@@ -20,7 +20,7 @@ interface ContactsDao {
     suspend fun updateContact(name: String, message: String, phoneNumber: String, id: Int)
 
     @Query("SELECT * FROM contacts_entity WHERE phoneNumber =:phoneNumber")
-    suspend fun getContact(phoneNumber: String): ContactEntity?
+    suspend fun getContactByPhoneNumber(phoneNumber: String): ContactEntity?
 
     @Query("UPDATE contacts_entity SET isContactSelected = :isSelected WHERE id=:id")
     suspend fun updateContactSelectStatus(isSelected: Boolean, id: Int)

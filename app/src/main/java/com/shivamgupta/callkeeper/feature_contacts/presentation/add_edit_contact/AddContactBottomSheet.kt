@@ -13,6 +13,7 @@ import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.FragmentAddContactSheetBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.getPhoneNumberWithoutPrefixCode
+import com.shivamgupta.callkeeper.feature_contacts.util.Constants
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.MESSAGE_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.PHONE_NUMBER_REGEX
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants.TEXT_REGEX
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AddContactSheet : BottomSheetDialogFragment() {
+class AddContactBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentAddContactSheetBinding
     private var updateContactDetails = false
@@ -111,10 +112,11 @@ class AddContactSheet : BottomSheetDialogFragment() {
             }
         }
     }
+    
 
     private fun setupAddContactFlow() = with(binding) {
         binding.phoneNumberLayout.afterTextChanged { phoneNumber ->
-            if (phoneNumber.length == 10) {
+            if (phoneNumber.length == Constants.PHONE_NUMBER_LENGTH) {
                 val preFilledPhoneNumber = contact?.phoneNumber.orEmpty()
                 if (updateContactDetails && preFilledPhoneNumber == phoneNumber) {
                     isPhoneNumberAlreadyExists = false
@@ -212,8 +214,8 @@ class AddContactSheet : BottomSheetDialogFragment() {
         private const val ARG_UPDATE_CONTACT_DETAILS = "ARG_UPDATE_CONTACT_DETAILS"
         private const val ARG_PHONE_NUMBER = "ARG_PHONE_NUMBER"
 
-        fun newInstance(updateContactDetails: Boolean, phoneNumber: String): AddContactSheet {
-            return AddContactSheet().apply {
+        fun newInstance(updateContactDetails: Boolean, phoneNumber: String): AddContactBottomSheet {
+            return AddContactBottomSheet().apply {
                 arguments = Bundle().apply {
                     putBoolean(ARG_UPDATE_CONTACT_DETAILS, updateContactDetails)
                     putString(ARG_PHONE_NUMBER, phoneNumber)

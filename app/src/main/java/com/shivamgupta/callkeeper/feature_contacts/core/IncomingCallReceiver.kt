@@ -10,7 +10,6 @@ import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
 import com.shivamgupta.callkeeper.feature_contacts.domain.mapper.toCallLogEntity
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.CallLogEntity
-import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 import com.shivamgupta.callkeeper.feature_contacts.domain.repository.AppPreferencesRepositoryImpl
 import com.shivamgupta.callkeeper.feature_contacts.domain.repository.CallLogsRepositoryImpl
@@ -53,7 +52,7 @@ class IncomingCallReceiver : BroadcastReceiver() {
 
     private fun handleIncomingCall(phoneNumber: String, context: Context) {
         job = CoroutineScope(Dispatchers.IO).launch {
-            val contact: ContactEntity? = contactsRepository.fetchContact(phoneNumber.substringAfter("+91"))
+            val contact: ContactEntity? = contactsRepository.fetchContactByPhoneNumber(phoneNumber.substringAfter("+91"))
             val message = if(contact?.useDefaultMessage == true) appPreferencesRepository.fetchDefaultMessage().first() else contact?.smsMessage.orEmpty()
 
             if (contact?.isContactSelected == true) {
