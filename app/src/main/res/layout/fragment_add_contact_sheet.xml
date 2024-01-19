@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="shouldUpdateContactDetails"
-            type="Boolean" />
+            name="vm"
+            type="com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contact.AddEditContactViewModel" />
     </data>
 
     <ScrollView
@@ -32,8 +32,7 @@
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_choose_from_your_contacts"
-                app:isVisible="@{!shouldUpdateContactDetails}" />
+                android:text="@string/label_choose_from_your_contacts" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/orLabelTv"
@@ -42,23 +41,24 @@
                 android:layout_marginTop="@dimen/margin_8dp"
                 android:text="@string/label_or"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                app:isVisible="@{!shouldUpdateContactDetails}" />
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/contactNameLayout"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:hint="@string/hint_input_contact_name">
+                android:hint="@string/hint_input_contact_name"
+                app:setError="@{vm.uiState.nameFieldErrorMessage}"
+                app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:text="@={vm.contactName}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,44 +68,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                app:endIconMode="clear_text"
-                android:hint="@string/hint_input_phone_number">
+                android:hint="@string/hint_input_phone_number"
+                app:setError="@{vm.uiState.phoneNumberFieldErrorMessage}"
+                app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
                     android:inputType="number"
-                    android:maxLength="10" />
+                    android:maxLength="10"
+                    android:text="@={vm.contactPhoneNumber}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/customMessageLayout"
+                android:id="@+id/custom_message_layout"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:hint="@string/hint_input_custom_message">
+                android:hint="@string/hint_input_custom_message"
+                app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:lines="5" />
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:maxLines="5"
+                    android:text="@={vm.smsMessage}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/submitBtn"
+                android:id="@+id/add_contact_button"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                app:updateBtnTextOnMode="@{shouldUpdateContactDetails}"
-                tools:text="@string/label_add" />
+                android:text="@string/label_add" />
 
 
         </LinearLayout>

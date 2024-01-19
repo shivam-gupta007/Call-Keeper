@@ -6,10 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shivamgupta.callkeeper.databinding.FragmentEditContactBottomBinding
+import com.shivamgupta.callkeeper.feature_contacts.domain.model.AddEditContactEvent
+import com.shivamgupta.callkeeper.feature_contacts.util.showSnackBar
+import com.shivamgupta.callkeeper.feature_contacts.util.toast
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
-class EditContactBottomFragment : Fragment() {
+class EditContactBottomFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentEditContactBottomBinding
     private val viewModel: AddEditContactViewModel by activityViewModels()
@@ -30,9 +37,28 @@ class EditContactBottomFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
         }
+
+        viewModel.onEvent(AddEditContactEvent.GetContact)
+
+        binding.updateContactButton.setOnClickListener {
+            updateContactDetails()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                if(state.isContactSaved){
+                    dismiss()
+                }
+
+                state.userMessage?.let { message ->
+                    toast(message)
+                    viewModel.userMessageShown()
+                }
+            }
+        }
     }
 
-    companion object {
-        const val TAG = "EDIT_CONTACT_SHEET"
+    private fun updateContactDetails() {
+        viewModel.onEvent(AddEditContactEvent.UpdateContact)
     }
 }

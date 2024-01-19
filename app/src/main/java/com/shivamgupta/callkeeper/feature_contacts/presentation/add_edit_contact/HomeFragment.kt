@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.FragmentHomeBinding
-import com.shivamgupta.callkeeper.feature_contacts.domain.mapper.toContact
+import com.shivamgupta.callkeeper.feature_contacts.domain.model.AddEditContactEvent
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
-import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
 import com.shivamgupta.callkeeper.feature_contacts.util.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -24,6 +24,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: ContactsViewModel by activityViewModels()
+    private val addEditContactViewModel: AddEditContactViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,34 +42,32 @@ class HomeFragment : Fragment() {
 
         viewModel.getContacts()
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.contacts.collect { contacts ->
-                contacts?.let {
-                    setupContacts(it)
-                }
+        viewLifecycleOwner.lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+               viewModel.uiState.collect{ currentUiState ->
+                   setupContacts(contacts = currentUiState.contacts)
+               }
             }
         }
 
         binding.addContactFab.setOnClickListener {
-            viewModel.clearPickedContact()
+            addEditContactViewModel.clearState()
             AddContactBottomSheet().show(parentFragmentManager, AddContactBottomSheet.TAG)
         }
     }
 
-    private fun setupContacts(contactEntities: List<ContactEntity>) {
+    private fun setupContacts(contacts: List<Contact>) {
         binding.contactsRecyclerView.adapter = ContactsAdapter(
-            items = contactEntities.map { it.toContact() },
+            items = contacts,
             onItemClick = { contact ->
-                AddContactBottomSheet.newInstance(
-                    updateContactDetails = true,
-                    phoneNumber = contact.phoneNumber
-                ).show(parentFragmentManager, AddContactBottomSheet.TAG)
+                addEditContactViewModel.onEvent(AddEditContactEvent.SetContactId(contact.id))
+                EditContactBottomFragment().show(parentFragmentManager, AddContactBottomSheet.TAG)
             },
             onItemLongPressed = { contact ->
                 showDeleteContactDialog(contact)
             },
-            onContactSelect = { position, isSelected ->
-                val contactId = contactEntities[position].id
+            onContactChecked = { position, isSelected ->
+                val contactId = contacts[position].id
                 viewModel.updateContactSelectionStatus(isSelected, contactId)
             }
         )

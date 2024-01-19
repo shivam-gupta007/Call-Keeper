@@ -5,6 +5,7 @@ import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactEntity
 
 fun ContactEntity.toContact(): Contact {
     return Contact(
+        id = id,
         name = name,
         phoneNumber = phoneNumber,
         smsMessage = smsMessage,

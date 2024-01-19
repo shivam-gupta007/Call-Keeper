@@ -15,7 +15,7 @@ class ContactsAdapter(
     private val items: List<Contact>,
     private val onItemClick: (Contact) -> Unit,
     private val onItemLongPressed: (Contact) -> Unit,
-    private val onContactSelect: (Int, Boolean) -> Unit
+    private val onContactChecked: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     inner class DataViewHolder(val binding: LayoutContactCardBinding) :
@@ -42,7 +42,7 @@ class ContactsAdapter(
                     setImageResource(if (tag == "unchecked") R.drawable.ic_circle else R.drawable.ic_circle_check)
 
                     val isSelected = (tag == "checked")
-                    onContactSelect(position, isSelected)
+                    onContactChecked(position, isSelected)
                 }
             }
 

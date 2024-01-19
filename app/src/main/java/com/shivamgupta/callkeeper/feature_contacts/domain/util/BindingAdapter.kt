@@ -6,17 +6,16 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.textfield.TextInputLayout
 import com.shivamgupta.callkeeper.R
+import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactItemUiState
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants
 import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
+import com.shivamgupta.callkeeper.feature_contacts.util.afterTextChanged
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 @BindingAdapter("handleTextLength")
 fun bindHandleTextLength(textView: TextView, maxLengthToShow: Int) {
@@ -74,4 +73,25 @@ fun bindFormatAsDate(textView: TextView, timeStamp: Long?){
         val desiredDateFormat = SimpleDateFormat(Constants.CALL_LOG_DATE_FORMAT, Locale.getDefault())
         textView.text = desiredDateFormat.format(currentDate)
     }
+}
+
+@BindingAdapter("setError")
+fun bindSetError(textInputLayout: TextInputLayout, errorMessage: String?){
+    if(!errorMessage.isNullOrEmpty()) {
+        textInputLayout.apply {
+            error = errorMessage
+            isErrorEnabled = true
+            editText?.requestFocus()
+
+            afterTextChanged {
+                error = null
+                isErrorEnabled = false
+            }
+        }
+    }
+}
+
+@BindingAdapter("enableOrDisableSubmitButton")
+fun bindEnableOrDisableSubmitButton(button: MaterialButton, contactItem: ContactItemUiState){
+    button.isEnabled = contactItem.name.isNotEmpty() && contactItem.phoneNumber.isNotEmpty()
 }
