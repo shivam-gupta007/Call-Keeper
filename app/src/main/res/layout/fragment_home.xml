@@ -25,15 +25,16 @@
                 android:id="@+id/contacts_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:isVisible="@{!vm.uiState.fetchingContacts}"
+                app:isVisible="@{!vm.isLoading()}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/layout_contact_card" />
 
             <ProgressBar
+                android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                app:isVisible="@{vm.uiState.fetchingContacts}" />
+                app:isVisible="@{vm.isLoading()}"
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -46,7 +47,7 @@
             android:contentDescription="@string/description_add_contact"
             android:text="@string/label_add_contact"
             app:icon="@drawable/ic_add"
-            app:isVisible="@{!vm.uiState.fetchingContacts}"
+            app:isVisible="@{!vm.isLoading()}"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

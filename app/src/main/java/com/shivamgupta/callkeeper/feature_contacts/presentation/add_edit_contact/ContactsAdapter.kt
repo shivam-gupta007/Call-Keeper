@@ -3,17 +3,17 @@ package com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contac
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.databinding.LayoutContactCardBinding
 import com.shivamgupta.callkeeper.databinding.LayoutEmptyContactsBinding
 import com.shivamgupta.callkeeper.feature_contacts.domain.model.Contact
+import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
 
 class ContactsAdapter(
     private val items: List<Contact>,
-    private val onItemClick: (Contact) -> Unit,
+    private val onContactClicked: (Contact) -> Unit,
     private val onItemLongPressed: (Contact) -> Unit,
     private val onContactChecked: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
@@ -23,8 +23,9 @@ class ContactsAdapter(
 
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
-                onItemClick(items[position])
+                adapterPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { position ->
+                    onContactClicked(items[position])
+                }
             }
 
             binding.root.setOnLongClickListener {
@@ -48,40 +49,33 @@ class ContactsAdapter(
 
         }
 
-        fun bind(item: Contact) = with(binding) {
-            contact = item
-            executePendingBindings()
+        fun bind(item: Contact) {
+            binding.contact = item
+            binding.executePendingBindings()
         }
     }
 
     inner class EmptyViewHolder(val binding: LayoutEmptyContactsBinding) : ViewHolder(binding.root) {
-        fun bind() = with(binding) {
-            message = root.resources.getString(R.string.empty_contacts_msg)
+        fun bind()  {
+            binding.message1 = ResourceProvider.getString(R.string.empty_contacts_msg1)
+            binding.message2 = ResourceProvider.getString(R.string.empty_contacts_msg2)
+            binding.message3 = ResourceProvider.getString(R.string.empty_contacts_msg3)
+            binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_ITEM -> {
                 DataViewHolder(
-                    DataBindingUtil.inflate(
-                        LayoutInflater.from(parent.context),
-                        R.layout.layout_contact_card,
-                        parent,
-                        false
-                    )
+                    LayoutContactCardBinding.inflate(layoutInflater,parent,false)
                 )
             }
 
             VIEW_TYPE_EMPTY -> {
                 EmptyViewHolder(
-                    DataBindingUtil.inflate(
-                        LayoutInflater.from(parent.context),
-                        R.layout.layout_empty_contacts,
-                        parent,
-                        false
-                    )
-
+                    LayoutEmptyContactsBinding.inflate(layoutInflater,parent,false)
                 )
             }
 

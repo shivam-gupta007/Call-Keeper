@@ -27,8 +27,7 @@ class HomeFragment : Fragment() {
     private val addEditContactViewModel: AddEditContactViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -42,48 +41,61 @@ class HomeFragment : Fragment() {
 
         viewModel.getContacts()
 
-        viewLifecycleOwner.lifecycleScope.launch{
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-               viewModel.uiState.collect{ currentUiState ->
-                   setupContacts(contacts = currentUiState.contacts)
-               }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { currentUiState ->
+                    setupContacts(contacts = currentUiState.contacts)
+                    currentUiState.userMessage?.let { message ->
+                        showSnackBar(text = message, rootLayout = binding.rootLayout)
+                    }
+                }
             }
         }
 
         binding.addContactFab.setOnClickListener {
-            addEditContactViewModel.clearState()
-            AddContactBottomSheet().show(parentFragmentManager, AddContactBottomSheet.TAG)
+            openAddContactSheet()
         }
     }
 
+    private fun openAddContactSheet() {
+        addEditContactViewModel.clearState()
+        AddContactBottomSheet().show(parentFragmentManager, AddContactBottomSheet.TAG)
+    }
+
     private fun setupContacts(contacts: List<Contact>) {
-        binding.contactsRecyclerView.adapter = ContactsAdapter(
+        val adapter = ContactsAdapter(
             items = contacts,
-            onItemClick = { contact ->
-                addEditContactViewModel.onEvent(AddEditContactEvent.SetContactId(contact.id))
-                EditContactBottomFragment().show(parentFragmentManager, AddContactBottomSheet.TAG)
+            onContactClicked = { contact ->
+                openEditContactSheet(contactId = contact.id)
             },
             onItemLongPressed = { contact ->
                 showDeleteContactDialog(contact)
-            },
-            onContactChecked = { position, isSelected ->
-                val contactId = contacts[position].id
-                viewModel.updateContactSelectionStatus(isSelected, contactId)
+            }, onContactChecked = { position, isSelected ->
+                toggleContactSelection(
+                    contactId = contacts[position].id, isChecked = isSelected
+                )
             }
         )
+
+        binding.contactsRecyclerView.adapter = adapter
+    }
+
+    private fun toggleContactSelection(contactId: Long, isChecked: Boolean) {
+        viewModel.updateContactSelectionStatus(isChecked, contactId)
+    }
+
+    private fun openEditContactSheet(contactId: Long) {
+        addEditContactViewModel.onEvent(AddEditContactEvent.SetContactId(contactId))
+        EditContactBottomFragment().show(parentFragmentManager, AddContactBottomSheet.TAG)
     }
 
     private fun showDeleteContactDialog(contact: Contact) {
-        val contactInfo = "${contact.name}\n${contact.phoneNumber}"
-        MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.MaterialAlertDialog_Material3)
-            .setTitle(ResourceProvider.getString(R.string.delete_contact_confirmation_msg))
-            .setMessage(contactInfo)
-            .setIcon(R.drawable.ic_delete)
+        MaterialAlertDialogBuilder(
+                requireContext(),
+                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered).setTitle(ResourceProvider.getString(R.string.delete_contact_confirmation_msg)).setMessage(getString(R.string.delete_contact_info, contact.name, contact.phoneNumber)
+            ).setIcon(R.drawable.ic_delete)
             .setPositiveButton(ResourceProvider.getString(R.string.delete_contact)) { dialog, _ ->
-                viewModel.deleteContact(phoneNumber = contact.phoneNumber)
-
-                showSnackBar(text = "${contact.name} - ${contact.phoneNumber} deleted", binding.rootLayout)
-
+                viewModel.removeContact(contact)
                 dialog.dismiss()
             }.setNegativeButton(ResourceProvider.getString(R.string.cancel_contact)) { dialog, _ ->
                 dialog.dismiss()

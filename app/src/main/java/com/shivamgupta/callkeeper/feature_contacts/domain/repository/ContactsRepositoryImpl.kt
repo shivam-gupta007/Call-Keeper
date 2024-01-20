@@ -101,9 +101,9 @@ class ContactsRepositoryImpl @Inject constructor(
         return contact
     }
 
-    override suspend fun deleteContact(phoneNumber: String) {
+    override suspend fun deleteContact(id: Long) {
         withContext(Dispatchers.IO) {
-            contactsDao.deleteContact(phoneNumber)
+            contactsDao.deleteContact(id)
         }
     }
 

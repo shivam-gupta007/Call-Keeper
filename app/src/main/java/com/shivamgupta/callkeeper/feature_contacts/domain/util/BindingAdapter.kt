@@ -12,6 +12,7 @@ import com.shivamgupta.callkeeper.feature_contacts.domain.model.ContactItemUiSta
 import com.shivamgupta.callkeeper.feature_contacts.util.Constants
 import com.shivamgupta.callkeeper.feature_contacts.util.ResourceProvider
 import com.shivamgupta.callkeeper.feature_contacts.util.afterTextChanged
+import com.shivamgupta.callkeeper.feature_contacts.util.truncateStringWithDots
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -19,10 +20,8 @@ import java.util.Locale
 
 @BindingAdapter("handleTextLength")
 fun bindHandleTextLength(textView: TextView, maxLengthToShow: Int) {
-    if (textView.text.length > maxLengthToShow) {
-        val text = textView.text
-        textView.text = text.substring(startIndex = 0, endIndex = maxLengthToShow).plus("....")
-    }
+    val text = textView.text.toString()
+    textView.text = text.truncateStringWithDots(maxLengthToShow)
 }
 
 @BindingAdapter("setProfileBackgroundColor")

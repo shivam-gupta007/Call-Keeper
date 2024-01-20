@@ -22,7 +22,7 @@ interface ContactsRepository {
 
     suspend fun fetchContactById(id: Long): ContactEntity?
 
-    suspend fun deleteContact(phoneNumber: String)
+    suspend fun deleteContact(id: Long)
 
     suspend fun updateDefaultMsgStatus(shouldUseDefaultMsg: Boolean)
 

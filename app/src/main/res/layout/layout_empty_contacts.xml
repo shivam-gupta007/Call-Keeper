@@ -5,7 +5,15 @@
     <data>
 
         <variable
-            name="message"
+            name="message1"
+            type="String" />
+
+        <variable
+            name="message2"
+            type="String" />
+
+        <variable
+            name="message3"
             type="String" />
     </data>
 
@@ -26,23 +34,26 @@
                 android:padding="@dimen/padding_8dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:text="You haven't added any contacts yet." />
+                android:text="@{message1}"
+                tools:text="@string/empty_contacts_msg1" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_8dp"
                 android:textAlignment="center"
+                android:text="@{message2}"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:text="Enhance your call management by adding phone numbers or selecting contacts." />
+                tools:text="@string/empty_contacts_msg2" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_8dp"
+                android:text="@{message3}"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:text="Tap the '+' button to begin" />
+                tools:text="@string/empty_contacts_msg3" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

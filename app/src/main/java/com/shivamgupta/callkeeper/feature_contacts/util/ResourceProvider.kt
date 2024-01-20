@@ -26,4 +26,9 @@ object ResourceProvider {
     fun getString(@StringRes stringResId: Int) : String {
         return applicationContext.getString(stringResId)
     }
+
+    fun getString(@StringRes stringResId: Int, vararg formatArgs: String) : String {
+        return applicationContext.getString(stringResId,*formatArgs)
+    }
+
 }

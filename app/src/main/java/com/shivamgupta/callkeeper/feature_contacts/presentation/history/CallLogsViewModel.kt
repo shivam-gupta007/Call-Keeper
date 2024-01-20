@@ -49,16 +49,6 @@ class CallLogsViewModel @Inject constructor(
         }
     }
 
-    fun insertCallLog(callLogEntity: CallLogEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                repository.insertCallLog(callLogEntity)
-            } catch (exception: Exception) {
-                _moduleError.emit(ResourceProvider.getString(R.string.unexpected_error_msg))
-            }
-        }
-    }
-
     fun deleteCallLog(phoneNumber: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

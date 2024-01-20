@@ -89,6 +89,14 @@ fun TextInputLayout.afterTextChanged(afterTextChanged: (String) -> Unit) {
     })
 }
 
+fun String.truncateStringWithDots(maxLengthToShow: Int = Constants.VISIBLE_TEXT_LENGTH): String {
+    return if (this.length > maxLengthToShow) {
+        this.substring(startIndex = 0, endIndex = maxLengthToShow).plus("....")
+    } else {
+        this
+    }
+}
+
 fun ViewModel.launchIO(
     block: suspend CoroutineScope.() -> Unit
 ) {

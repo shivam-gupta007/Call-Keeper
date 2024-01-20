@@ -14,6 +14,8 @@ object Constants {
     //Regular Expressions
     val PHONE_NUMBER_REGEX = Regex("^[6789][0-9]{9}\$")
 
+    const val VISIBLE_TEXT_LENGTH = 18
+
     const val CONTACTS_DATABASE = "contacts_database"
 
     const val TIMESTAMP_DATE_FORMAT = "yyyy-MM-ddHH:mm:ss.SSS"

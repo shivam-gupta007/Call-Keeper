@@ -31,8 +31,8 @@ interface ContactsDao {
     @Query("UPDATE contacts_entity SET isContactSelected = :isSelected")
     suspend fun updateSelectStatusOfAllContacts(isSelected: Boolean)
 
-    @Query("DELETE FROM contacts_entity WHERE phoneNumber = :phoneNumber")
-    suspend fun deleteContact(phoneNumber: String)
+    @Query("DELETE FROM contacts_entity WHERE id = :id")
+    suspend fun deleteContact(id: Long)
 
     @Query("UPDATE contacts_entity SET useDefaultMessage =:shouldUseDefaultMsg")
     suspend fun updateDefaultMsgStatus(shouldUseDefaultMsg: Boolean)
