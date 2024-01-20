@@ -1,4 +1,6 @@
 # Call Keeper 📟
+![call keeper app mockup](https://github.com/shivam-gupta007/Call-Keeper/assets/83108424/0cdebb4e-c00e-40a1-96d9-8faef8f6304d)
+
 Keep unwanted calls at bay with Call Keeper! 🚫
 
 Call Keeper is an Android app that helps you manage unwanted incoming calls. With Call Keeper, you can:
