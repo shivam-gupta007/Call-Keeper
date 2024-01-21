@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.shivamgupta.callkeeper.feature_contacts.presentation.add_edit_contact.ContactsViewModel" />
+            type="com.shivamgupta.callkeeper.presentation.home.ContactsViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/padding_16dp"
-            tools:context=".feature_contacts.presentation.add_edit_contact.HomeFragment">
+            tools:context=".presentation.home.HomeFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/contacts_recyclerView"

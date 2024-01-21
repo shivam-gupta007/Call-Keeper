@@ -2,13 +2,15 @@ package com.shivamgupta.callkeeper.di
 
 import android.app.Application
 import androidx.room.Room
-import com.shivamgupta.callkeeper.feature_contacts.data.data_source.local.ContactsDatabase
-import com.shivamgupta.callkeeper.feature_contacts.data.data_source.preferences.AppPreferences
-import com.shivamgupta.callkeeper.feature_contacts.data.repository.AppPreferencesRepository
-import com.shivamgupta.callkeeper.feature_contacts.domain.repository.AppPreferencesRepositoryImpl
-import com.shivamgupta.callkeeper.feature_contacts.domain.repository.CallLogsRepositoryImpl
-import com.shivamgupta.callkeeper.feature_contacts.domain.repository.ContactsRepositoryImpl
-import com.shivamgupta.callkeeper.feature_contacts.util.Constants
+import com.shivamgupta.callkeeper.data.data_source.local.ContactsDatabase
+import com.shivamgupta.callkeeper.data.data_source.preferences.AppPreferences
+import com.shivamgupta.callkeeper.data.repository.AppPreferencesRepositoryImpl
+import com.shivamgupta.callkeeper.data.repository.CallLogsRepositoryImpl
+import com.shivamgupta.callkeeper.data.repository.ContactsRepositoryImpl
+import com.shivamgupta.callkeeper.domain.repository.AppPreferencesRepository
+import com.shivamgupta.callkeeper.domain.repository.CallLogsRepository
+import com.shivamgupta.callkeeper.domain.repository.ContactsRepository
+import com.shivamgupta.callkeeper.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +26,7 @@ object AppModule {
     fun providesContactsRepository(
         app: Application,
         database: ContactsDatabase
-    ): ContactsRepositoryImpl {
+    ): ContactsRepository {
         return ContactsRepositoryImpl(
             app,
             database
@@ -36,7 +38,7 @@ object AppModule {
     fun providesCallLogsRepository(
         app: Application,
         database: ContactsDatabase
-    ): CallLogsRepositoryImpl {
+    ): CallLogsRepository {
         return CallLogsRepositoryImpl(
             app,
             database
@@ -47,7 +49,7 @@ object AppModule {
     @Singleton
     fun providesAppPreferencesRepository(
         appPreferences: AppPreferences
-    ): AppPreferencesRepositoryImpl {
+    ): AppPreferencesRepository {
         return AppPreferencesRepositoryImpl(appPreferences)
     }
 

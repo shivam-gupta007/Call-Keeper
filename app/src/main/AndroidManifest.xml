@@ -27,7 +27,7 @@
         android:theme="@style/Theme.CallKeeper"
         tools:targetApi="31">
         <activity
-            android:name=".feature_contacts.presentation.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
 
         <!-- IncomingCallReceiver -->
         <!--        <receiver-->
-        <!--            android:name=".feature_contacts.core.IncomingCallReceiver"-->
+        <!--            android:name=".core.IncomingCallReceiver"-->
         <!--            android:enabled="true"-->
         <!--            android:exported="false">-->
         <!--            <intent-filter>-->
@@ -47,7 +47,7 @@
         <!--        </receiver>-->
 
         <service
-            android:name=".feature_contacts.core.PhoneCallService"
+            android:name=".core.PhoneCallService"
             android:foregroundServiceType="phoneCall" />
 
         <meta-data
