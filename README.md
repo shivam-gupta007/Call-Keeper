@@ -20,9 +20,9 @@ Call Keeper is easy to use and has an intuitive user interface. It is built with
 - 🔎 You can store a record of rejected calls to track who has been calling you and when.
 
 ## Upcoming features 👀
-- Location-based & schedule-based call rejection feature: allows users to activate or deactivate call rejection based on their schedule and location.
-- Firebase integration: to store all the data on the cloud.
-- First, users authenticate using biometrics or other options before enabling call rejection features.
+- ⏳Location-based & schedule-based call rejection feature: allows users to activate or deactivate call rejection based on their schedule and location.
+- ✅ Firebase integration: to store all the data on the cloud.
+- 🔐First, users authenticate using biometrics or other options before enabling call rejection features.
 
 ```
 MIT License
