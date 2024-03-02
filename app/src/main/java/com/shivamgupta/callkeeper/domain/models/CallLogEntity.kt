@@ -1,5 +1,6 @@
 package com.shivamgupta.callkeeper.domain.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -7,8 +8,8 @@ import androidx.room.PrimaryKey
 data class CallLogEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val phoneNumber: String,
-    val smsMessage: String,
-    val profilePhotoColor: Int,
+    @ColumnInfo("phone_number") val phoneNumber: String,
+    @ColumnInfo("sms_message") val smsMessage: String,
+    @ColumnInfo("profile_photo_color") val profilePhotoColor: Int,
     val timestamp: Long
 )

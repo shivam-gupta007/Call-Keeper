@@ -17,8 +17,6 @@ interface ContactsRepository {
 
     suspend fun updateSelectStatusOfAllContacts(isSelected: Boolean)
 
-    suspend fun fetchContactByPhoneNumber(phoneNumber: String): ContactEntity?
-
     suspend fun fetchContactById(id: Long): ContactEntity?
 
     suspend fun deleteContact(id: Long)

@@ -1,19 +1,16 @@
 package com.shivamgupta.callkeeper.data.repository
 
-import android.app.Application
-import com.shivamgupta.callkeeper.data.data_source.local.ContactsDatabase
-import com.shivamgupta.callkeeper.domain.repository.CallLogsRepository
+import com.shivamgupta.callkeeper.data.data_source.local.CallLogsDao
 import com.shivamgupta.callkeeper.domain.models.CallLogEntity
+import com.shivamgupta.callkeeper.domain.repository.CallLogsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CallLogsRepositoryImpl @Inject constructor(
-    val app: Application, database: ContactsDatabase
+    private val callLogsDao: CallLogsDao
 ) : CallLogsRepository {
-    private val callLogsDao = database.getCallLogsDao()
-
     override fun fetchCallLogs(): Flow<List<CallLogEntity>> {
         return callLogsDao.getCallLogs()
     }

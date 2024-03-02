@@ -59,7 +59,7 @@ fun Fragment.showSnackBar(text: String, rootLayout: View) {
 
 
 //TextInputLayout Extensions
-var TextInputLayout.textValue: String
+var TextInputLayout.editTextValue: String
     get() = editText?.text.toString()
     set(value) {
         editText?.setText(value)
@@ -101,7 +101,7 @@ fun ViewModel.launchIO(
     block: suspend CoroutineScope.() -> Unit
 ) {
     viewModelScope.launch(Dispatchers.IO) {
-        block
+
     }
 }
 

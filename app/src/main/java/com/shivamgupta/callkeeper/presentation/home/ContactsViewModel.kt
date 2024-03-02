@@ -1,17 +1,18 @@
 package com.shivamgupta.callkeeper.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shivamgupta.callkeeper.R
-import com.shivamgupta.callkeeper.domain.repository.ContactsRepository
 import com.shivamgupta.callkeeper.domain.mapper.toContact
 import com.shivamgupta.callkeeper.domain.models.Contact
+import com.shivamgupta.callkeeper.domain.models.ContactEntity
 import com.shivamgupta.callkeeper.domain.models.ContactsUiState
+import com.shivamgupta.callkeeper.domain.repository.ContactsRepository
 import com.shivamgupta.callkeeper.domain.util.ExceptionUtils
 import com.shivamgupta.callkeeper.util.ResourceProvider
 import com.shivamgupta.callkeeper.util.truncateStringWithDots
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,41 +27,33 @@ class ContactsViewModel @Inject constructor(
     private val repository: ContactsRepository
 ) : ViewModel() {
 
-    companion object {
-        const val TAG = "ContactsViewModel"
-    }
-
     private val _uiState = MutableStateFlow(ContactsUiState())
     val uiState get() = _uiState.asStateFlow()
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        updateUserMessageFromException(throwable)
+    }
+
     private var contactsJob: Job? = null
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading get() = _isLoading.asStateFlow()
-
     fun updateContactSelectionStatus(isSelected: Boolean, id: Long) {
-        viewModelScope.launch {
-            try {
-                repository.updateContactSelectStatus(isSelected, id)
-            } catch (e: Exception) {
-                updateUserMessageByException(e)
-            }
+        viewModelScope.launch(context = exceptionHandler) {
+            repository.updateContactSelectStatus(isSelected, id)
         }
     }
 
     fun removeContact(contact: Contact) {
-        viewModelScope.launch {
-            try {
-                repository.deleteContact(contact.id)
-                updateUserMessage(
-                    message = ResourceProvider.getString(
-                        stringResId = R.string.delete_contact_message,
-                        contact.name.truncateStringWithDots(), contact.phoneNumber
-                    )
-                )
-            } catch (e: Exception) {
-                Log.d(TAG, "removeContact: e: $e")
-                updateUserMessageByException(e)
+        viewModelScope.launch(context = exceptionHandler) {
+            repository.deleteContact(contact.id)
+
+            val message = ResourceProvider.getString(
+                stringResId = R.string.delete_contact_message,
+                contact.name.truncateStringWithDots(),
+                contact.phoneNumber
+            )
+
+            _uiState.update { currentUiState ->
+                currentUiState.copy(userMessage = message)
             }
         }
     }
@@ -68,29 +61,30 @@ class ContactsViewModel @Inject constructor(
     fun getContacts() {
         contactsJob?.cancel()
         contactsJob = viewModelScope.launch {
-            _isLoading.emit(true)
+            _uiState.update { it.copy(isLoading = true) }
+
             repository.fetchContacts().catch {
-                _isLoading.emit(false)
-                updateUserMessage(ResourceProvider.getString(R.string.unexpected_error_msg))
-            }.collect { contactEntities ->
-                val contacts = contactEntities.map { it.toContact() }
                 _uiState.update { currentUiState ->
-                    currentUiState.copy(contacts = contacts)
+                    currentUiState.copy(
+                        userMessage = ResourceProvider.getString(R.string.unexpected_error_msg),
+                        isLoading = false
+                    )
                 }
-                _isLoading.emit(false)
+            }.collect { contactEntities ->
+                val contacts = contactEntities.map(ContactEntity::toContact)
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        contacts = contacts,
+                        isLoading = false
+                    )
+                }
             }
         }
     }
 
-    private fun updateUserMessageByException(e: Exception) {
+    private fun updateUserMessageFromException(t: Throwable) {
         _uiState.update { currentUiState ->
-            currentUiState.copy(userMessage = ExceptionUtils.getUiMessageOfException(e))
-        }
-    }
-
-    private fun updateUserMessage(message: String) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(userMessage = message)
+            currentUiState.copy(userMessage = ExceptionUtils.getUiMessageOfException(t))
         }
     }
 }

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,32 +27,34 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    val binding get() = _binding!!
+
     private val viewModel: ContactsViewModel by activityViewModels()
     private val addEditContactViewModel: AddEditContactViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.apply {
-            vm = viewModel
-            lifecycleOwner = viewLifecycleOwner
-        }
-
         viewModel.getContacts()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { currentUiState ->
-                    setupContacts(contacts = currentUiState.contacts)
-                    currentUiState.userMessage?.let { message ->
-                        showSnackBar(text = message, rootLayout = binding.rootLayout)
-                    }
+            viewModel.uiState.flowWithLifecycle(lifecycle).collect { currentUiState ->
+                setupContacts(contacts = currentUiState.contacts)
+
+                binding.apply {
+                    contactsRecyclerView.isVisible = !currentUiState.isLoading
+                    progressBar.isVisible = currentUiState.isLoading
+                    addContactFab.isVisible = !currentUiState.isLoading
+                }
+
+                currentUiState.userMessage?.let { message ->
+                    showSnackBar(text = message, rootLayout = binding.rootLayout)
                 }
             }
         }
@@ -58,6 +62,11 @@ class HomeFragment : Fragment() {
         binding.addContactFab.setOnClickListener {
             openAddContactSheet()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun openAddContactSheet() {
@@ -95,8 +104,10 @@ class HomeFragment : Fragment() {
     private fun showDeleteContactDialog(contact: Contact) {
         MaterialAlertDialogBuilder(
                 requireContext(),
-                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered).setTitle(ResourceProvider.getString(R.string.delete_contact_confirmation_msg)).setMessage(getString(R.string.delete_contact_info, contact.name, contact.phoneNumber)
-            ).setIcon(R.drawable.ic_delete)
+                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered)
+            .setTitle(ResourceProvider.getString(R.string.delete_contact_confirmation_msg))
+            .setMessage(getString(R.string.delete_contact_info, contact.name, contact.phoneNumber))
+            .setIcon(R.drawable.ic_delete)
             .setPositiveButton(ResourceProvider.getString(R.string.delete_contact)) { dialog, _ ->
                 viewModel.removeContact(contact)
                 dialog.dismiss()

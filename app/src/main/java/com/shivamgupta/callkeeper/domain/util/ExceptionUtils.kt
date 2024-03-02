@@ -5,8 +5,8 @@ import com.shivamgupta.callkeeper.R
 import com.shivamgupta.callkeeper.util.ResourceProvider
 
 object ExceptionUtils {
-    fun getUiMessageOfException(e: Exception): String{
-        return when(e){
+    fun getUiMessageOfException(throwable: Throwable): String{
+        return when(throwable){
             is SQLiteConstraintException -> {
                 ResourceProvider.getString(R.string.duplicate_phone_number_error_msg)
             }

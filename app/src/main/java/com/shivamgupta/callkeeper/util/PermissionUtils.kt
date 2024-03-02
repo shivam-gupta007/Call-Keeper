@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 
 object PermissionUtils {
-    private val requiredPermissions = listOf(
+    val requiredPermissions = listOf(
         Manifest.permission.ANSWER_PHONE_CALLS,
         Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.SEND_SMS,
@@ -23,6 +23,17 @@ object PermissionUtils {
 
     fun checkSendSmsPermission(context: Context): Boolean {
         return (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    fun isPhoneCallAndSmsPermissionGranted(
+        context: Context
+    ): Boolean {
+        val permissions = listOf(
+            Manifest.permission.ANSWER_PHONE_CALLS,
+            Manifest.permission.SEND_SMS,
+        )
+
+        return permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED  }
     }
 
     fun isAllRequiredPermissionsGranted(context: Context): Boolean {

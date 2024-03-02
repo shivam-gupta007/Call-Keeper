@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,16 +49,20 @@ class SettingsViewModel @Inject constructor(
 
     private fun checkDefaultMessage() {
         viewModelScope.launch {
-            appPreferencesRepository.fetchDefaultMessage().collectLatest {
-                _defaultSmsMessage.emit(it)
+            appPreferencesRepository.fetchDefaultMessage().collectLatest { message ->
+                _defaultSmsMessage.update {
+                    message
+                }
             }
         }
     }
 
     private fun checkIsCallRejectionEnabled() {
         viewModelScope.launch {
-            appPreferencesRepository.isCallRejectionEnabled().collectLatest {
-                _isCallRejectionEnabled.emit(it)
+            appPreferencesRepository.isCallRejectionEnabled().collectLatest { isEnabled ->
+                _isCallRejectionEnabled.update {
+                    isEnabled
+                }
             }
         }
     }

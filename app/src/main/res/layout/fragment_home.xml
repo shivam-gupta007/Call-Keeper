@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="vm"
-            type="com.shivamgupta.callkeeper.presentation.home.ContactsViewModel" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,7 +18,6 @@
                 android:id="@+id/contacts_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:isVisible="@{!vm.isLoading()}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/layout_contact_card" />
 
@@ -33,7 +25,6 @@
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:isVisible="@{vm.isLoading()}"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 
@@ -47,7 +38,6 @@
             android:contentDescription="@string/description_add_contact"
             android:text="@string/label_add_contact"
             app:icon="@drawable/ic_add"
-            app:isVisible="@{!vm.isLoading()}"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

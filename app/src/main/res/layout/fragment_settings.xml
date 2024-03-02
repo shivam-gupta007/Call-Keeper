@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -45,13 +46,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:hint="@string/default_message_label">
+                android:hint="@string/default_message_label"
+                app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
+                    android:gravity="top|start"
                     android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:maxLines="5"
                     android:text="@{vm.defaultSmsMessage}"
                     tools:text="I am currently busy. Call me later" />
 

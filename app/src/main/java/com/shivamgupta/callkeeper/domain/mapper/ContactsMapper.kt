@@ -13,3 +13,16 @@ fun ContactEntity.toContact(): Contact {
         isContactSelected = isContactSelected
     )
 }
+
+fun List<ContactEntity>.toContacts(): List<Contact> {
+    return map {
+        Contact(
+            id = it.id,
+            name = it.name,
+            phoneNumber = it.phoneNumber,
+            smsMessage = it.smsMessage,
+            defaultPhotoColor = it.profilePhotoColor,
+            isContactSelected = it.isContactSelected
+        )
+    }
+}

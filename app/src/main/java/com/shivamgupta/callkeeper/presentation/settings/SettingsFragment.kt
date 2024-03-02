@@ -1,6 +1,5 @@
 package com.shivamgupta.callkeeper.presentation.settings
 
-import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +13,15 @@ import com.shivamgupta.callkeeper.presentation.home.ContactsViewModel
 import com.shivamgupta.callkeeper.util.PermissionUtils
 import com.shivamgupta.callkeeper.util.ResourceProvider
 import com.shivamgupta.callkeeper.util.showSnackBar
-import com.shivamgupta.callkeeper.util.textValue
+import com.shivamgupta.callkeeper.util.editTextValue
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
-    private lateinit var binding: FragmentSettingsBinding
+    private var _binding: FragmentSettingsBinding? = null
+    val binding get() = _binding!!
+
     private val viewModel: SettingsViewModel by activityViewModels()
     private val contactsViewModel: ContactsViewModel by activityViewModels()
 
@@ -37,8 +38,13 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +58,7 @@ class SettingsFragment : Fragment() {
     private fun setupViews() {
         binding.enableFeatureSwitch.setOnCheckedChangeListener { switch, isChecked ->
             val isContactsEmpty = contactsViewModel.uiState.value.contacts.isEmpty()
+
             if (isContactsEmpty) {
                 switch.isChecked = false
                 showSnackBar(text = ResourceProvider.getString(R.string.empty_contacts_message), rootLayout = binding.rootLayout)
@@ -60,14 +67,7 @@ class SettingsFragment : Fragment() {
                     viewModel.enableOrDisableCallRejection(isChecked)
                 } else {
                     switch.isChecked = false
-                    requestMultiplePermissionLauncher.launch(
-                        arrayOf(
-                            Manifest.permission.ANSWER_PHONE_CALLS,
-                            Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.SEND_SMS,
-                            Manifest.permission.READ_CALL_LOG,
-                        )
-                    )
+                    requestMultiplePermissionLauncher.launch(PermissionUtils.requiredPermissions.toTypedArray())
                 }
             }
         }
@@ -76,11 +76,18 @@ class SettingsFragment : Fragment() {
             viewModel.updateApplyDefaultMsgGlobally(isChecked)
         }
 
-        binding.applyChangesButton.setOnClickListener {
-            val message = binding.defaultMsgInputLayout.textValue
-            viewModel.changeDefaultMessage(message)
-            showSnackBar(ResourceProvider.getString(R.string.default_message), binding.rootLayout)
-        }
+        setupDefaultMsgInputBox()
+    }
 
+    private fun setupDefaultMsgInputBox() {
+        binding.applyChangesButton.setOnClickListener {
+            val message = binding.defaultMsgInputLayout.editTextValue
+            if (message.isEmpty()) {
+                showSnackBar(ResourceProvider.getString(R.string.empty_default_msg_error), binding.rootLayout)
+            } else {
+                viewModel.changeDefaultMessage(message)
+                showSnackBar(ResourceProvider.getString(R.string.default_message_updated), binding.rootLayout)
+            }
+        }
     }
 }

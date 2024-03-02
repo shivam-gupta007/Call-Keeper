@@ -6,6 +6,7 @@ object Constants {
 
     const val PHONE_STATE_ACTION = "android.intent.action.PHONE_STATE"
     const val PHONE_NUMBER_LENGTH = 10
+    const val COUNTRY_CODE = "+91"
 
     val tabsName = listOf("Home", "History", "Settings")
     val tabsIconsRes = listOf(R.drawable.ic_home, R.drawable.ic_history, R.drawable.ic_settings)

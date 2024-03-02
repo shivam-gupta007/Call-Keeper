@@ -3,6 +3,7 @@ package com.shivamgupta.callkeeper.data.repository
 import android.app.Application
 import android.net.Uri
 import android.provider.ContactsContract
+import com.shivamgupta.callkeeper.data.data_source.local.ContactsDao
 import com.shivamgupta.callkeeper.data.data_source.local.ContactsDatabase
 import com.shivamgupta.callkeeper.domain.repository.ContactsRepository
 import com.shivamgupta.callkeeper.domain.models.ContactEntity
@@ -14,10 +15,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ContactsRepositoryImpl @Inject constructor(
-    val app: Application, database: ContactsDatabase
+    private val contactsDao: ContactsDao,
+    private val app: Application
 ) : ContactsRepository {
-
-    private val contactsDao = database.getContactsDao()
 
     override suspend fun extractContactDetails(contactUri: Uri): ContactNameAndPhoneNumber? {
         val contentResolver = app.contentResolver
@@ -92,13 +92,6 @@ class ContactsRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             contactsDao.updateSelectStatusOfAllContacts(isSelected)
         }
-    }
-
-    override suspend fun fetchContactByPhoneNumber(phoneNumber: String): ContactEntity? {
-        val contact = withContext(Dispatchers.IO) {
-            contactsDao.getContactByPhoneNumber(phoneNumber)
-        }
-        return contact
     }
 
     override suspend fun deleteContact(id: Long) {

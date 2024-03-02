@@ -5,8 +5,9 @@ import com.shivamgupta.callkeeper.domain.repository.AppPreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AppPreferencesRepositoryImpl(
+class AppPreferencesRepositoryImpl @Inject constructor(
     private val appPreferences: AppPreferences
 ) : AppPreferencesRepository {
 

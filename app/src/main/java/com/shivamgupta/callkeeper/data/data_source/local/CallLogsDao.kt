@@ -16,6 +16,6 @@ interface CallLogsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCallLog(callLog: CallLogEntity)
 
-    @Query("DELETE FROM call_log_entity WHERE phoneNumber = :phoneNumber")
+    @Query("DELETE FROM call_log_entity WHERE phone_number = :phoneNumber")
     suspend fun deleteCallLog(phoneNumber: String)
 }

@@ -32,7 +32,7 @@
     <string name="cancel_contact">Cancel</string>
     <string name="contact_permission_error_msg">Contacts Permission Denied.</string>
     <string name="default_message">I am currently busy. Call me later</string>
-    <string name="enable_feature_label">Enable call rejection</string>
+    <string name="enable_feature_label">Enable automatic call rejection</string>
     <string name="default_message_guide_text">Apply default message to all contacts</string>
     <string name="default_message_label">Default Message</string>
     <string name="apply_changes_label">Update message</string>
@@ -40,5 +40,6 @@
     <string name="delete_contact_message">%s | %s deleted.</string>
     <string name="delete_contact_info">%s | %s</string>
     <string name="empty_contacts_message">Please add at least one contact to activate the call rejection feature</string>
-    <string name="default_message_update">Default message updated</string>
+    <string name="default_message_updated">Default message updated</string>
+    <string name="empty_default_msg_error">Default message cannot be blank.</string>
 </resources>

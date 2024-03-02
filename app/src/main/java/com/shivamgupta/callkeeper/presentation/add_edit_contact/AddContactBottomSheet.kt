@@ -20,7 +20,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddContactBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: FragmentAddContactSheetBinding
+    private var _binding: FragmentAddContactSheetBinding? = null
+    val binding: FragmentAddContactSheetBinding get() = _binding!!
+
     private val viewModel: AddEditContactViewModel by activityViewModels()
 
     private val requestContactsPermission = registerForActivityResult(
@@ -44,7 +46,7 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_contact_sheet, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_contact_sheet, container, false)
         return binding.root
     }
 
@@ -56,6 +58,11 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
 
         setupAddContactFlow()
         setupContactChooser()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupContactChooser() {
