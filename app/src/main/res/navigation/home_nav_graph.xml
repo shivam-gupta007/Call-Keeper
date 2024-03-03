@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.shivamgupta.callkeeper.presentation.home.HomeFragment"
+        android:name="com.shivamgupta.callkeeper.contacts.presentation.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
@@ -16,18 +16,18 @@
     </fragment>
     <dialog
         android:id="@+id/addContactSheet"
-        android:name="com.shivamgupta.callkeeper.presentation.add_edit_contact.AddContactBottomSheet"
+        android:name="com.shivamgupta.callkeeper.contacts.presentation.add_edit_contact.AddContactBottomSheet"
         android:label="AddContactSheet"
         tools:layout="@layout/fragment_add_contact_sheet">
 
         <argument
             android:name="contact"
-            app:argType="com.shivamgupta.callkeeper.domain.models.Contact" />
+            app:argType="com.shivamgupta.callkeeper.contacts.domain.contact.Contact" />
 
     </dialog>
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.shivamgupta.callkeeper.presentation.MainActivity"
+        android:name="com.shivamgupta.callkeeper.core.presentation.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
 </navigation>

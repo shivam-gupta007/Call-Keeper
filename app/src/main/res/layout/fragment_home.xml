@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/padding_16dp"
-            tools:context=".presentation.home.HomeFragment">
+            tools:context=".contacts.presentation.home.HomeFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/contacts_recyclerView"

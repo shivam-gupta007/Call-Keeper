@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.shivamgupta.callkeeper.presentation.history.CallLogsViewModel" />
+            type="com.shivamgupta.callkeeper.history.presentation.CallLogsViewModel" />
     </data>
 
     <RelativeLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/padding_16dp"
-        tools:context=".presentation.history.HistoryFragment">
+        tools:context=".history.presentation.HistoryFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/callLogsRv"

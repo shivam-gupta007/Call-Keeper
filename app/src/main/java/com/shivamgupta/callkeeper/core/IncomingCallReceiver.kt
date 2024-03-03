@@ -7,10 +7,10 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.SmsManager
 import android.telephony.TelephonyManager
-import com.shivamgupta.callkeeper.domain.mapper.toCallLogEntity
-import com.shivamgupta.callkeeper.domain.models.CallLogEntity
-import com.shivamgupta.callkeeper.domain.models.ContactEntity
-import com.shivamgupta.callkeeper.domain.repository.CoreFeatureRepository
+import com.shivamgupta.callkeeper.history.domain.call_log.toCallLogEntity
+import com.shivamgupta.callkeeper.history.domain.call_log.CallLogEntity
+import com.shivamgupta.callkeeper.contacts.domain.contact.ContactEntity
+import com.shivamgupta.callkeeper.core.domain.repository.CoreFeatureRepository
 import com.shivamgupta.callkeeper.util.Constants
 import com.shivamgupta.callkeeper.util.PermissionUtils
 import dagger.hilt.android.AndroidEntryPoint

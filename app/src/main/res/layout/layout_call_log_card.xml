@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.shivamgupta.callkeeper.domain.models.CallLog" />
+        <import type="com.shivamgupta.callkeeper.history.domain.call_log.CallLog" />
 
         <variable
             name="callLog"
-            type="com.shivamgupta.callkeeper.domain.models.CallLog" />
+            type="com.shivamgupta.callkeeper.history.domain.call_log.CallLog" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

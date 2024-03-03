@@ -7,7 +7,7 @@
 
         <variable
             name="contact"
-            type="com.shivamgupta.callkeeper.domain.models.Contact" />
+            type="com.shivamgupta.callkeeper.contacts.domain.contact.Contact" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
