@@ -1,0 +1,25 @@
+name: AndroidBuild
+on:
+  pull_request :
+    branches : [ master ]
+  push :
+    branches : [ master ]
+
+jobs:
+  build:
+    runs-on : ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.1.0
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: Call-Keeper.apk
+          path: app/build/outputs/apk/app-debug.apk
