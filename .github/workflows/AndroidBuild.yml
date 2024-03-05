@@ -1,9 +1,9 @@
 name: AndroidBuild
 on:
   pull_request :
-    branches : [ master ]
+    branches : [ deployment/ci-cd-implementation ]
   push :
-    branches : [ master ]
+    branches : [ deployment/ci-cd-implementation ]
 
 jobs:
   build:
