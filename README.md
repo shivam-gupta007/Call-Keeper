@@ -3,6 +3,9 @@
 
 [<img src="https://github.com/shivam-gupta007/Call-Keeper/assets/83108424/4a038aee-8a02-4d48-a65a-447fe7ca7986" alt="Get it on GitHub" width="200"/>](https://github.com/shivam-gupta007/Call-Keeper/releases/tag/v1.2.0)
 
+
+[<img src="https://github.com/shivam-gupta007/Call-Keeper/assets/83108424/d770f1aa-6194-476e-b49e-6f37f2656abd" alt="Get it on Google Play" width="200"/>](https://play.google.com/store/apps/details?id=com.shivamgupta.callkeeper)
+
 Keep unwanted calls at bay with Call Keeper! 🚫
 
 Call Keeper is an Android app that helps you manage unwanted incoming calls. With Call Keeper, you can:
@@ -17,8 +20,12 @@ Call Keeper is easy to use and has an intuitive user interface. It is built with
 
 - 🔇 You can reject calls from specific contacts, so you don't have to worry about being interrupted by unwanted calls.
 - 💬 You can customize rejection messages to be sent to the callers, so they know why you're rejecting their calls.
-- 🔎 You can store a record of rejected calls, so you can track who has been calling you and when.
+- 🔎 You can store a record of rejected calls to track who has been calling you and when.
 
+## Upcoming features 👀
+- ⏳Location-based & schedule-based call rejection feature: allows users to activate or deactivate call rejection based on their schedule and location.
+- ✅ Firebase integration: to store all the data on the cloud.
+- 🔐First, users authenticate using biometrics or other options before enabling call rejection features.
 
 ```
 MIT License
