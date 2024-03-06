@@ -16,15 +16,15 @@ class CallLogsAdapter(private val items: List<CallLog>) :
 
     inner class DataViewHolder(val binding: LayoutCallLogCardBinding) :
         ViewHolder(binding.root) {
-        fun bind(item: CallLog) = with(binding) {
-            callLog = item
-            executePendingBindings()
+        fun bind(item: CallLog)  {
+            binding.callLog = item
+            binding.executePendingBindings()
         }
     }
 
     inner class EmptyViewHolder(val binding: LayoutEmptyCallLogsBinding) : ViewHolder(binding.root) {
-        fun bind() = with(binding) {
-            message = root.resources.getString(R.string.empty_call_log_message)
+        fun bind() {
+            binding.message = binding.root.resources.getString(R.string.empty_call_log_message)
         }
     }
 

@@ -60,6 +60,7 @@ class ContactsViewModel @Inject constructor(
     fun getContacts() {
         contactsJob?.cancel()
         contactsJob = viewModelScope.launch {
+
             _uiState.update { it.copy(isLoading = true) }
 
             repository.fetchContacts().catch {
